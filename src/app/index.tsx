@@ -3,10 +3,20 @@ import { Button } from '@/components/button'
 import { Input } from '@/components/input'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Link } from 'expo-router'
-import { View, Image, StatusBar } from 'react-native'
+import { useState } from 'react'
+import { View, Image, StatusBar, Alert } from 'react-native'
 
 
 export default function Home() {
+
+  const [ code, setCode ] = useState('')
+
+  function handleAccessCredentials() {
+    if(!code.trim()) {
+      return Alert.alert("Credentiais", 'Informe o código do ingresso!')
+    }
+  }
+
   return ( 
     <View className='bg-green-500 flex-1 items-center justify-center p-10'>
       <StatusBar barStyle='light-content' />
@@ -24,10 +34,10 @@ export default function Home() {
             size={20}
           />
 
-          <Input placeholder='Código do ingresso' />
+          <Input placeholder='Código do ingresso' onChangeText={(value) => setCode(value)} />
         </View>
 
-        <Button title='Acessar credencial' />
+        <Button title='Acessar credencial' onPress={handleAccessCredentials} />
 
         <Link href='/register' className='text-base font-bold text-gray-100 text-center mt-8' > Ainda não possui ingresso? </Link>
       </View>
