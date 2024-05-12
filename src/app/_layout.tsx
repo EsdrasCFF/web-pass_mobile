@@ -1,5 +1,4 @@
 import { Slot } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 
 // Import your global CSS file
 import "@/app/global.css"
@@ -14,13 +13,14 @@ export default function Layout() {
     Roboto_400Regular
   })
 
-
-  return  (
-    <>
-      <StatusBar style="light" />
-      { fontsLoaded ? <Slot /> : <Loading /> }
-    </>
-  )
+  if(!fontsLoaded) {
+    return (
+      <Loading />
+    )
   }
+  return  (
+    <Slot /> 
+  )
+}
 
 
