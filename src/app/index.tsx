@@ -1,4 +1,5 @@
 import { colors } from '@/assets/styles/colors'
+import { Button } from '@/components/button'
 import { Input } from '@/components/input'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { View, Image } from 'react-native'
@@ -23,6 +24,8 @@ export default function Home() {
 
           <Input placeholder='Código do ingresso' />
         </View>
+
+        <Button title='Acessar credencial' />
       </View>
     </View>
   )
