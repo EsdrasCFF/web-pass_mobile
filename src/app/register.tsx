@@ -2,7 +2,7 @@ import { colors } from '@/assets/styles/colors'
 import { Button } from '@/components/button'
 import { Input } from '@/components/input'
 import { FontAwesome6, MaterialIcons } from '@expo/vector-icons'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import { View, Image, StatusBar, Alert } from 'react-native'
 
@@ -18,6 +18,8 @@ export default function Register() {
     if(!name.trim() || !email.trim()) {
       return Alert.alert('Inscrição', 'Preencha todos os campos!')
     }
+    
+    router.push('/ticket')
   }
 
   return ( 
