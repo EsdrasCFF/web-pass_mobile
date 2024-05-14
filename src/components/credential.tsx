@@ -1,7 +1,14 @@
+import { colors } from "@/assets/styles/colors";
+import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { Image, ImageBackground, Pressable, Text, TouchableOpacity, View } from "react-native";
 
-export function Credential() {
+type Props = {
+  onChangeAvatar?: () => void
+  imageUrl?: string
+}
+
+export function Credential({ onChangeAvatar, imageUrl }: Props) {
   const [opacity, setOpacity] = useState(false)
 
 
@@ -25,12 +32,24 @@ export function Credential() {
           <View className="w-40 h-40 bg-black rounded-full" />
         </ImageBackground>
 
-        <Image 
-          source={{uri: 'https://github.com/EsdrasCFF.png'}}
-          className="w-36 h-36 rounded-full -mt-24"
-        />
+        {imageUrl ? (
+          <TouchableOpacity activeOpacity={0.5} onPress={onChangeAvatar}>
+            <Image 
+              source={{uri: imageUrl}}
+              className="w-36 h-36 rounded-full -mt-24"
+            />
+           </TouchableOpacity>
+        ) : (
+          <TouchableOpacity activeOpacity={0.5} onPress={onChangeAvatar}>
+            <View className="w-36 h-36 rounded-full bg-gray-400 items-center justify-center -mt-24" >
+              <Feather name="camera" color={colors.green[400]} size={32}  />
+            </View>
+          </TouchableOpacity>
+        )}
+
 
         <Text className="font-bold text-2xl text-zinc-50 mt-4" > Esdras Castro </Text>
+  
         <Text className="font-regular text-base text-zinc-300 mb-4" > ecff.dev@gmail.com </Text>
       
         <Image
@@ -38,9 +57,9 @@ export function Credential() {
           className="w-32 h-32"
         />
 
-        <Pressable className="mt-6" >
-          <Text className={`font-body text-sm text-orange-500 ${opacity ? 'text-orange/70' : ''} `} >  Ampliar QRCode  </Text>
-        </Pressable>
+        <TouchableOpacity  activeOpacity={0.5} >
+          <Text className="mt-6 font-body text-sm text-orange-500" >  Ampliar QRCode  </Text>
+        </TouchableOpacity>
 
       </View>
     </View>
