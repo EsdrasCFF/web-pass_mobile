@@ -5,21 +5,53 @@ import { FontAwesome6, MaterialIcons } from '@expo/vector-icons'
 import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import { View, Image, StatusBar, Alert } from 'react-native'
+import axios from 'axios'
 
+import { api } from '@/server/api'
+
+const EVENT_ID = "29a56924-b4c3-437d-aed7-f42fa6a6b142"
 
 export default function Register() {
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
 
+  const [isLoading, setIsLoading] = useState(false)
 
-
-  function handleRegister() {
-    if(!name.trim() || !email.trim()) {
-      return Alert.alert('Inscrição', 'Preencha todos os campos!')
-    }
+  async function handleRegister() {
     
-    router.push('/ticket')
+    try {
+      if(!name.trim() || !email.trim()) {
+        return Alert.alert('Inscrição', 'Preencha todos os campos!')
+      }
+      
+      setIsLoading(true)
+
+      const registerResponse = await api.post(`/events/${EVENT_ID}/attendees`, {
+        name,
+        email
+      })
+
+      if(registerResponse.data.attendeeId) {
+        Alert.alert('Inscrição', 'Inscrição realizada com sucesso!', [
+          {text: 'OK', onPress: () => router.push('/ticket') },
+        ])
+      }
+
+      
+    } catch(error) {
+      console.log('Error to the trying login:', error)
+
+      if(axios.isAxiosError(error)) {
+        if(String(error.response?.data.message).includes('already registered')) {
+          return Alert.alert('Inscrição', 'Este e-mai já está cadastrado!')
+        }
+      }
+
+      Alert.alert('Inscrição', 'Não foi possível concluir a sua inscrição. Tente novamente mais tarde!')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return ( 
@@ -52,7 +84,11 @@ export default function Register() {
           <Input placeholder='E-mail' keyboardType='email-address' onChangeText={setEmail} />
         </View>
 
-        <Button title='Realizar Inscrição' onPress={handleRegister} />
+        <Button 
+          title='Realizar Inscrição' 
+          onPress={handleRegister} 
+          isLoading={isLoading}
+        />
 
         <Link href='/' className='text-base font-bold text-gray-100 text-center mt-8' > Já possui ingresso? </Link>
       </View>
