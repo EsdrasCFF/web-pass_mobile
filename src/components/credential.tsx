@@ -3,14 +3,16 @@ import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { Image, ImageBackground, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { QRCode } from "@/components/qrcode";
+import { BadgeStore } from "@/store/badge-store";
 
 type Props = {
+  data: BadgeStore
   onChangeAvatar?: () => void
   onShowQRCode?: () => void 
   imageUrl?: string
 }
 
-export function Credential({ onChangeAvatar, onShowQRCode,imageUrl }: Props) {
+export function Credential({ data, onChangeAvatar, onShowQRCode,imageUrl }: Props) {
   const [opacity, setOpacity] = useState(false)
 
 
@@ -27,8 +29,8 @@ export function Credential({ onChangeAvatar, onShowQRCode,imageUrl }: Props) {
           className="px-6 py-8 h-40 items-center self-stretch border-b border-white/10 overflow-hidden"
         >
           <View className="w-full flex-row items-center justify-between" >
-            <Text className="text-zinc-50 text-sm font-bold" > Unite Summit </Text>
-            <Text className="text-zinc-50 text-sm font-bold" > #123456 </Text>
+            <Text className="text-zinc-50 text-sm font-bold capitalize" > {data.eventTitle} </Text>
+            <Text className="text-zinc-50 text-sm font-bold" > #{data.id} </Text>
           </View>
 
           <View className="w-40 h-40 bg-black rounded-full" />
@@ -50,11 +52,11 @@ export function Credential({ onChangeAvatar, onShowQRCode,imageUrl }: Props) {
         )}
 
 
-        <Text className="font-bold text-2xl text-zinc-50 mt-4" > Esdras Castro </Text>
+        <Text className="font-bold text-2xl text-zinc-50 mt-4 capitalize" > {data.name} </Text>
   
-        <Text className="font-regular text-base text-zinc-300 mb-4" > ecff.dev@gmail.com </Text>
+        <Text className="font-regular text-base text-zinc-300 mb-4 lowercase" > {data.email} </Text>
       
-        <QRCode value="teste" size={120} />
+        <QRCode value={data.checkInURL} size={120} />
 
         <TouchableOpacity  activeOpacity={0.5} onPress={onShowQRCode}>
           <Text className="mt-6 font-body text-sm text-orange-500" >  Ampliar QRCode  </Text>

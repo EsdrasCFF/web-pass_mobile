@@ -8,11 +8,15 @@ import { useState } from "react";
 
 import * as ImagePicker from 'expo-image-picker'
 import { QRCode } from "@/components/qrcode";
+import { useBadgeStore } from "@/store/badge-store";
+import { Redirect } from "expo-router";
 
 export default function Ticket() {
   
   const [image, setImage] = useState('')
   const [expandQRCode, setExpandQRCode] = useState(false)
+
+  const badgeStore = useBadgeStore()
 
   async function handleSelectImage() {
     try {
@@ -34,6 +38,10 @@ export default function Ticket() {
     }
   }
   
+  if(!badgeStore.data?.checkInURL) {
+    return <Redirect href='/' />
+  }
+
   return (
     <View className='flex-1 bg-green-500' >
       <StatusBar barStyle='light-content' />
@@ -41,20 +49,20 @@ export default function Ticket() {
 
       <ScrollView className="-mt-28 -z-10" contentContainerClassName="px-8 pb-8" showsVerticalScrollIndicator={false}>
 
-        <Credential imageUrl={image} onChangeAvatar={handleSelectImage} onShowQRCode={() => setExpandQRCode(true)} />
+        <Credential imageUrl={image} onChangeAvatar={handleSelectImage} onShowQRCode={() => setExpandQRCode(true)} data={badgeStore.data} />
 
         <FontAwesome  name="angle-double-down" size={24}  color={colors.gray[300]}  className="self-center my-6" />
 
         <View className="px-10 gap-1" >
           <Text className="font-bold text-2xl mt-4 text-center text-white" > Compartilhar credencial </Text>
 
-          <Text className="text-base text-gray-200 mb-6" >Mostre ao mundo que você vai participar do Unite Summit! </Text>
+          <Text className="text-base text-gray-200 mb-6" >Mostre ao mundo que você vai participar do {badgeStore.data.eventTitle} </Text>
         
           <Button title="Compartilhar" />
 
-          <Pressable className="self-center mt-10" >
-            <Text className="text-white font-bold" > Remover Ingresso</Text>
-          </Pressable>
+          <TouchableOpacity activeOpacity={0.7} onPress={() => badgeStore.remove()} >
+            <Text className="text-white font-bold self-center mt-10" > Remover Ingresso</Text>
+          </TouchableOpacity> 
         </View>
     
       </ScrollView>

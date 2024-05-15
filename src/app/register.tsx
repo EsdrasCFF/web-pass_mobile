@@ -8,6 +8,7 @@ import { View, Image, StatusBar, Alert } from 'react-native'
 import axios from 'axios'
 
 import { api } from '@/server/api'
+import { useBadgeStore } from '@/store/badge-store'
 
 const EVENT_ID = "29a56924-b4c3-437d-aed7-f42fa6a6b142"
 
@@ -17,6 +18,8 @@ export default function Register() {
   const [email, setEmail] = useState('')
 
   const [isLoading, setIsLoading] = useState(false)
+
+  const badgeStore = useBadgeStore()
 
   async function handleRegister() {
     
@@ -33,6 +36,12 @@ export default function Register() {
       })
 
       if(registerResponse.data.attendeeId) {
+        
+        const badgeResponse = await api.get(`/attendees/${registerResponse.data.attendeeId}/badge`)
+
+        badgeStore.save(badgeResponse.data.badge)
+
+
         Alert.alert('Inscrição', 'Inscrição realizada com sucesso!', [
           {text: 'OK', onPress: () => router.push('/ticket') },
         ])
