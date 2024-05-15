@@ -13,7 +13,6 @@ import { Redirect } from "expo-router";
 
 export default function Ticket() {
   
-  const [image, setImage] = useState('')
   const [expandQRCode, setExpandQRCode] = useState(false)
 
   const badgeStore = useBadgeStore()
@@ -27,8 +26,7 @@ export default function Ticket() {
       })
 
       if(result.assets) {
-        setImage(result.assets[0].uri)
-        console.log(result.assets)
+        badgeStore.updateAvatar(result.assets[0].uri)
       }
 
 
@@ -49,7 +47,7 @@ export default function Ticket() {
 
       <ScrollView className="-mt-28 -z-10" contentContainerClassName="px-8 pb-8" showsVerticalScrollIndicator={false}>
 
-        <Credential imageUrl={image} onChangeAvatar={handleSelectImage} onShowQRCode={() => setExpandQRCode(true)} data={badgeStore.data} />
+        <Credential onChangeAvatar={handleSelectImage} onShowQRCode={() => setExpandQRCode(true)} data={badgeStore.data} />
 
         <FontAwesome  name="angle-double-down" size={24}  color={colors.gray[300]}  className="self-center my-6" />
 
@@ -70,7 +68,7 @@ export default function Ticket() {
       <Modal visible={expandQRCode} statusBarTranslucent animationType="fade" >
         <View className="flex-1 bg-green-500 items-center justify-center" >
           <TouchableOpacity activeOpacity={0.7} onPress={() => setExpandQRCode(false)} >
-            <QRCode value="teste" size={280} />
+            <QRCode value={badgeStore.data.checkInURL} size={280} />
             
             <Text className="text-base text-white font-bold text-center mt-12" > Fechar </Text>
           </TouchableOpacity>

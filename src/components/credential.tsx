@@ -9,11 +9,9 @@ type Props = {
   data: BadgeStore
   onChangeAvatar?: () => void
   onShowQRCode?: () => void 
-  imageUrl?: string
 }
 
-export function Credential({ data, onChangeAvatar, onShowQRCode,imageUrl }: Props) {
-  const [opacity, setOpacity] = useState(false)
+export function Credential({ data, onChangeAvatar, onShowQRCode }: Props) {
 
 
   return (
@@ -36,10 +34,10 @@ export function Credential({ data, onChangeAvatar, onShowQRCode,imageUrl }: Prop
           <View className="w-40 h-40 bg-black rounded-full" />
         </ImageBackground>
 
-        {imageUrl ? (
+        {data.image ? (
           <TouchableOpacity activeOpacity={0.5} onPress={onChangeAvatar}>
             <Image 
-              source={{uri: imageUrl}}
+              source={{uri: data.image}}
               className="w-36 h-36 rounded-full -mt-24"
             />
            </TouchableOpacity>
