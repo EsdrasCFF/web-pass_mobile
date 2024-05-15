@@ -1,6 +1,6 @@
 import { Header } from "@/components/header";
 import { Credential } from "@/components/credential";
-import { View, Text, StatusBar, ScrollView, Pressable, Alert, Modal, TouchableOpacity } from "react-native";
+import { View, Text, StatusBar, ScrollView, Pressable, Alert, Modal, TouchableOpacity, Share } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { colors } from "@/assets/styles/colors";
 import { Button } from "@/components/button";
@@ -16,6 +16,21 @@ export default function Ticket() {
   const [expandQRCode, setExpandQRCode] = useState(false)
 
   const badgeStore = useBadgeStore()
+
+  async function handleShare() {
+    try {
+
+      if(badgeStore.data?.checkInURL) {
+        await Share.share({
+          message: badgeStore.data.checkInURL
+        })
+      }
+
+    } catch(err) {
+      console.log('Error to try share:', err)
+      Alert.alert("Compartilhar", 'Não foi possível compartilhar a credencial')
+    }
+  }
 
   async function handleSelectImage() {
     try {
@@ -56,7 +71,7 @@ export default function Ticket() {
 
           <Text className="text-base text-gray-200 mb-6" >Mostre ao mundo que você vai participar do {badgeStore.data.eventTitle} </Text>
         
-          <Button title="Compartilhar" />
+          <Button title="Compartilhar" onPress={handleShare}/>
 
           <TouchableOpacity activeOpacity={0.7} onPress={() => badgeStore.remove()} >
             <Text className="text-white font-bold self-center mt-10" > Remover Ingresso</Text>
