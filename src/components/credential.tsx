@@ -1,9 +1,11 @@
 import { colors } from "@/assets/styles/colors";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
-import { Image, ImageBackground, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, Pressable, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
 import { QRCode } from "@/components/qrcode";
 import { BadgeStore } from "@/store/badge-store";
+
+import { MotiView } from 'moti'
 
 type Props = {
   data: BadgeStore
@@ -13,9 +15,34 @@ type Props = {
 
 export function Credential({ data, onChangeAvatar, onShowQRCode }: Props) {
 
+  const { height } = useWindowDimensions()
 
   return (
-    <View className="w-full items-center px-10" >
+    <MotiView 
+      className="w-full items-center px-10" 
+      from={{
+        opacity: 0,
+        translateY: -height,
+        rotateZ: "50deg",
+        rotateX: "30deg",
+        rotateY: "30deg",
+      }}
+      animate={{
+        opacity: 1,
+        translateY: 0,
+        rotateZ: "0deg",
+        rotateX: "0deg",
+        rotateY: "0deg"
+      }}
+      transition={{
+        type: "spring",
+        duration: 3000,
+        rotateZ: {
+          damping: 15,
+          mass: 3,
+        }
+      }}
+    >
       <Image 
         source={require('@/assets/ticket/band.png')} 
         className="w-24 h-52 z-10"
@@ -61,6 +88,6 @@ export function Credential({ data, onChangeAvatar, onShowQRCode }: Props) {
         </TouchableOpacity>
 
       </View>
-    </View>
+    </MotiView>
   )
 }
